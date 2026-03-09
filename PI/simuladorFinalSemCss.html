@@ -73,34 +73,47 @@
             let valorEnergia = Number(energia.value);
             let valorOperacional = Number(operacional.value);
 
+            // valor total da carga (preço do lote multiplicado pela quantidade de lotes)
             let perda = valorLote * lotes;
 
             let textoTemperatura = "";
 
             let custoSensor = 30;
+
+            // custo total do projeto (quantidade de lotes multiplicada pelo custo de cada sensor)
             let projeto = lotes * custoSensor;
 
             let perdaAtual = 0.03;
             let perdaNova = 0.006;
 
+            //  perda mensal atual considerando 3% de perda
             let perdaAtualMensal = lotes * valorLote * perdaAtual;
+
+            // perda mensal após a implementação do sistema (0,6% de perda)
             let perdaNovaMensal = lotes * valorLote * perdaNova;
 
+            // economia nas perdas por mês
             let economiaPerdas = perdaAtualMensal - perdaNovaMensal;
 
+            // economia mensal total com base na redução de perdas
             let economiaMensal = economiaPerdas;
 
+            // economia total em um ano
             let economiaAnual = economiaMensal * 12;
 
+            // ROI anual do projeto em porcentagem
             let roi = (economiaAnual / projeto) * 100;
 
             let custoAtual = perdaAtualMensal;
             let custoNovo = perdaNovaMensal;
 
+            // porcentagem de redução de custos com perdas
             let reducaoCustos = ((custoAtual - custoNovo) / custoAtual) * 100;
 
+            // tempo de retorno do investimento em meses
             let payback = projeto / economiaMensal;
 
+            // custos de transporte, energia e operacional à perda total
             perda += valorTransporte + valorEnergia + valorOperacional;
 
             if (classificacao == 'Leve') {
@@ -114,10 +127,16 @@
             }
 
             if (segundaVez == 'Sim') {
+
+                // valor da multa dobrada por ser reincidência
                 let TotalMulta = multa * 2;
+
+                // valor da multa dobrada ao prejuízo total
                 perda += TotalMulta;
             }
             else if (segundaVez == 'Não') {
+
+                // valor da multa normal ao prejuízo total
                 perda += multa;
             }
 
