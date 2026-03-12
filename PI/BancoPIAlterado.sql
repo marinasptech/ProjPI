@@ -1,44 +1,62 @@
 create database projetoTemp;
 use projetoTemp;
 
-create table distribuidora(
-	idDistribuidora int primary key auto_increment,
-	nome varchar(40),
-	cnpj CHAR(14),
-	produto varchar(30),
-	estoque varchar(5)
+CREATE TABLE fornecedor(
+idFornecedor INT PRIMARY KEY AUTO_INCREMENT,
+nomeFornecedor VARCHAR(50),
+CNPJ CHAR(14),
+produto VARCHAR(50),
+estoque VARCHAR(50)
+);
+CREATE TABLE empresa(
+idEmpresa INT PRIMARY KEY AUTO_INCREMENT,
+nomeEmpresa VARCHAR(50),
+CNPJ CHAR(14),
+pedido VARCHAR(30)
 );
 
-create table lote(
-	idLote int primary key auto_increment,
-    codigo varchar(30) not null,
-    produto varchar(30),
-    dtSaida datetime,
-    dtEstimada date,
-    tempoEstimado time,
-    tempMedia decimal(3,1),
-    dtEntrega datetime,
-    qldEntrega varchar(30),
-    constraint qldEntregaC check(qldEntrega in('Bom Estado', 'Qualidade Prejudicada', 'Produto Deteriorado'))
+CREATE TABLE lote(
+	idLote INT PRIMARY KEY AUTO_INCREMENT,
+    codigo VARCHAR(30) NOT NULL,
+    fkSensor INT,
+    CONSTRAINT cFkSensor FOREIGN KEY (fkSensor) REFERENCES sensor (idSensor),-- FOREIGN KEY
+    produto VARCHAR(50),
+    dtSaida DATETIME,
+    dtEstimada DATE,
+    tempoEstimado TIME,
+    localLote VARCHAR (50),
+    tempMedia DECIMAL(3,1),
+    dtEntrega DATETIME,
+    fkFornecedor INT, 
+    CONSTRAINT cFkFornecedor FOREIGN KEY (fkFornecedor) REFERENCES fornecedor (idFornecedor),-- FOREIGN KEY
+    qldEntrega  VARCHAR(50),
+    CONSTRAINT qldEntregaC CHECK(qldEntrega IN('Bom Estado', 'Qualidade Prejudicada', 'Produto Deteriorado'))
 );
 
-create table produto(
-	idProduto int primary key auto_increment,
-    codigo varchar(30) not null,
-    nomeProduto varchar(30),
-    tempMax decimal (4,1),
-    tempMin decimal (4,1)
+CREATE TABLE produto(
+	idProduto INT PRIMARY KEY AUTO_INCREMENT,
+    codigo VARCHAR(30) NOT NULL,
+    nomeProduto  VARCHAR(30),
+    tempMax DECIMAL (4,1),
+    tempMin DECIMAL (4,1),
+	fkFornecedor INT, 
+	CONSTRAINT cFkFornecedor FOREIGN KEY (fkFornecedor) REFERENCES fornecedor (idFornecedor) -- FOREIGN KEY
 );
 
 create table sensor(
-	idSensor int primary key auto_increment,
-    tempAtual decimal (4,1),
-    condicao varchar(20),
-    constraint condicaoC check(condicao in ('Funcionando', 'Defeituoso'))
+	idSensor INT PRIMARY KEY AUTO_INCREMENT,
+    codSensor INT NOT NULL,
+    tempAtual DECIMAL (4,1),
+    condicao VARCHAR(20),
+    CONSTRAINT condicaoC CHECK(condicao IN ('Funcionando', 'Defeituoso')),
+    localSensor VARCHAR(50) 
 );
 create table registroTemperatura(
-	idRegistro int primary key auto_increment,
-	temperatura decimal(4,1),
-	dtRegistro datetime,
-	localSensor varchar(50),
+	idRegistro INT PRIMARY KEY AUTO_INCREMENT,
+    fkSensor INT,
+    CONSTRAINT cFkSensor FOREIGN KEY (fkSensor) REFERENCES sensor (idSensor), -- FOREIGN KEY
+	temperatura DECIMAL (4,1),
+	dtRegistro DATETIME,
+    fkLote INT,
+    CONSTRAINT cFkLote FOREIGN KEY (fkLote) REFERENCES lote (idLote) -- FOREIGN KEY
 );

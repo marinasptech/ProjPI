@@ -18,7 +18,7 @@ void loop() {
 // output
   Serial.print("Temperatura: ");
   Serial.print(temperaturaCelsius);
-  Serial.print(" C");
+  Serial.print(" C \n");
   // delay funciona em milisegundos, entao 2000 equivale a 2 segundos
   delay(2000);
 }
